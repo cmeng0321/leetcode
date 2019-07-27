@@ -1,29 +1,46 @@
 #include <iostream>
 #include <vector>
-#include <set>
+#include <stack>
+#include <string>
+#include <cstring>
 
-using std::vector;
+using namespace std;
 /* run this program using the console pauser or add your own getch, system("pause") or input loop */
 
-int lastStoneWeight(vector<int>& stones) {
-   int m1,m2;
-    std::multiset<int> stone(stones.begin(),stones.end());
-    while(stone.size()>1)
-    {
-        m1=*(--stone.end());
-        stone.erase(stone.find(m1));
-        m2=*stone.rbegin();
-        stone.erase(stone.find(m2));
-        if(m1!=m2) stone.insert(m1-m2);
+int calPoints(vector<string>& ops) {
+        int m=0;
+        stack<int> point;
+        for(int i=0;i<ops.size();i++)
+        {
+            if(ops[i]=="+") 
+            {
+                int s1=point.top();
+                point.pop();
+                int s2=point.top();
+                point.push(s1);
+                point.push(s1+s2);
+            }
+            
+            else if(ops[i]=="D")  point.push(point.top()*2);
+                
+                else if(ops[i]=="C") point.pop();
+                       
+                    else 
+                        point.push(atoi(c_str(ops[i])));
+                
+        }
+        while(!point.empty())
+        {
+            m+=point.top();
+            point.pop();
+        }
+        return m;
     }
-    return stone.empty() ? 0 : *stone.begin();
-}
-int main(int argc, char** argv) {
+int main() {
 	int i;
 	vector<int> a;
 	while(std::cin >> i) {a.push_back(i);}
 	i=lastStoneWeight(a);
-	std::cout << i << std::endl;
-	return 0;
+	std::cout << i;
 }
 
